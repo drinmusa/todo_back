@@ -31,7 +31,9 @@ require("./middlewares/passport")(passport);
 app.use("/api/user", userRouter);
 app.use("/api/list", listRouter);
 app.use("/api/task", taskRouter);
-
+app.get('/',(req,res)=>{
+	res.send("Welcome to todo api");
+});
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
