@@ -8,7 +8,7 @@ router.post(
   passport.authenticate("jwt", { session: false }),
   listController.createList
 );
-router.get(
+router.post(
   "/list",
   passport.authenticate("jwt", { session: false }),
   listController.getList
@@ -24,7 +24,7 @@ router.post(
   listController.updateList
 );
 
-router.delete(
+router.post(
   "/delete",
   passport.authenticate("jwt", { session: false }),
   listController.deleteList

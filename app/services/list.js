@@ -10,10 +10,10 @@ const listService = {
       description,
     }).save();
   },
-  async editList(data, userID) {
+  async updateList(data, userID) {
     return await List.findOneAndUpdate(
       { $and: [{ _id: data.listID }, { author: userID }] },
-      { $: data },
+      { $set: data },
       { new: true }
     );
   },

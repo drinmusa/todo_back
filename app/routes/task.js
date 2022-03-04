@@ -18,13 +18,27 @@ router.get(
   passport.authenticate("jwt", { session: false }),
   taskController.getTasks
 );
+router.get(
+  "/tasks/today",
+  passport.authenticate("jwt", { session: false }),
+  taskController.getTodaysTasks
+);
+router.get(
+  "/list",
+  passport.authenticate("jwt", { session: false }),
+  taskController.getTasksByList
+);
 router.post(
   "/update",
   passport.authenticate("jwt", { session: false }),
   taskController.updateTask
 );
-
-router.delete(
+router.post(
+  "/tasks/update",
+  passport.authenticate("jwt", { session: false }),
+  taskController.removeListFromTasks
+);
+router.post(
   "/delete",
   passport.authenticate("jwt", { session: false }),
   taskController.deleteTask

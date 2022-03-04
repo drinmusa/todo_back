@@ -1,6 +1,6 @@
 const { verify } = require("jsonwebtoken");
 const secretKey = process.env.KEY || "1234567";
-console.log("secret key ", secretKey);
+
 const taskService = require("../services/task");
 
 const validateTaskInput = require("../validation/task");
@@ -8,7 +8,7 @@ const validateTaskInput = require("../validation/task");
 const createTask = async (req, res) => {
   try {
     const { errors, isValid } = validateTaskInput(req.body);
-    console.log(req.body);
+
     if (!isValid) {
       return res.status(422).json(errors);
     }
@@ -79,11 +79,55 @@ const getTasks = async (req, res) => {
     console.log(error);
   }
 };
-
+const getTodaysTasks = async (req, res) => {
+  try {
+    const tasks = await taskService.getTodaysTasks(req.user.id);
+    if (!tasks) {
+      return res.status(404).json({
+        message: "No tasks due for today",
+      });
+    }
+    return res.status(200).json(tasks);
+  } catch (error) {
+    console.log(error);
+  }
+};
+const getTasksByList = async (req, res) => {
+  try {
+    const tasks = await taskService.getTasksByList(req.body, req.user.id);
+    if (tasks.length == 0) {
+      return res.status(404).json({
+        message: "No tasks in this list",
+      });
+    }
+    return res.status(200).json(tasks);
+  } catch (error) {
+    console.log(error);
+  }
+};
+const removeListFromTasks = async (req, res) => {
+  try {
+    const updatedTasks = await taskService.removeListFromTasks(
+      req.body,
+      req.user.id
+    );
+    if (!updatedTasks) {
+      return res.status(404).json({
+        message: "No tasks in this llist",
+      });
+    }
+    return updatedTasks;
+  } catch (error) {
+    console.log(error);
+  }
+};
 module.exports = {
   createTask,
   deleteTask,
   updateTask,
   getTask,
   getTasks,
+  getTodaysTasks,
+  getTasksByList,
+  removeListFromTasks,
 };

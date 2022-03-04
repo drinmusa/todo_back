@@ -10,7 +10,6 @@ const taskService = {
       title,
       description,
       due_date,
-      status,
     }).save();
   },
   async deleteTask(data, userID) {
@@ -21,7 +20,7 @@ const taskService = {
   async updateTask(data, userID) {
     return await Task.findOneAndUpdate(
       { $and: [{ _id: data.taskID }, { author: userID }] },
-      { $: data },
+      { $set: data },
       { new: true }
     );
   },
@@ -30,8 +29,26 @@ const taskService = {
       $and: [{ _id: data.taskID }, { author: userID }],
     });
   },
-  async getTasks() {
-    return await Task.find();
+  async getTasks(userID) {
+    return await Task.find({
+      author: userID,
+    });
+  },
+  async getTasksByList(data, userID) {
+    return await Task.find({
+      $and: [{ list: data.list }, { author: userID }],
+    });
+  },
+  async getTodaysTasks(userID) {
+    return await Task.find({
+      $and: [{ author: userID }, { due_date: new Date().toISOString() }],
+    });
+  },
+  async removeListFromTasks(data, userID) {
+    return await Task.updateMany(
+      { $and: [{ author: userID }, { list: data.list }] },
+      { $unset: { list: "" } }
+    );
   },
 };
 module.exports = taskService;

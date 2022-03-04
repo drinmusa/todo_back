@@ -14,37 +14,14 @@ const userService = {
       password: hashedPassword,
     }).save();
   },
-	async userExists(data) {
+  async userExists(data) {
     return await User.findOne({
       username: data.username,
     });
   },
-	async getUserByID(data) {
+  async getUserByID(data) {
     return await User.findOne({
       _id: data,
-    });
-  },
-  async UpdateProfile(data) {
-    return await User.findOneAndUpdate(
-      { user: data.id },
-      { $set: data },
-      { new: true }
-    );
-  },
-  async deleteUser(userId) {
-    await User.findOneAndRemove({
-      _id: userId,
-    });
-  },
-
-
-  async changePassword(data) {
-    const hashedPassword = await helpers.hashPassword(data);
-    return await User.findOneAndUpdate({
-      user: data._id,
-      $set: {
-        password: hashedPassword,
-      },
     });
   },
 };
